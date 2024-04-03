@@ -18,18 +18,17 @@ namespace My347 {
 	using namespace msclr::interop;
 
 	string decipherPattern(const string& binarySequence) {
-		string result; // Результат сжатия
-		int count = 0; // Счетчик нулей
+		string result; // результат (строка)
+		int count = 0; // счетчик нулей
 
-		for (char c : binarySequence) {
-			if (c == '1') {
-				// Если встретили '1', добавляем соответствующую букву
-				result += static_cast<char>('a' + count);
-				count = 0; // Обнуляем счетчик
+		for (char i : binarySequence) { // пробегаем по всем символам циклом
+			if (i == '1') { // если встретили '1', добавляем соответствующую букву
+				result += static_cast<char>('a' + count); // статик_каст удостоверяет то, что переменная будет типа char
+				// 'a' + count - прибавляем к ascii коду буквы a счетчкик
+				count = 0; // обнуляем счетчик
 			}
 			else {
-				// Если встретили '0', увеличиваем счетчик
-				count++;
+				count++; // если встретили '0', увеличиваем счетчик
 			}
 		}
 
