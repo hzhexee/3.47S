@@ -17,6 +17,8 @@ namespace My347 {
 	using namespace msclr;
 	using namespace msclr::interop;
 
+	system("chcp 1251");
+
 	string decipherPattern(const string& binarySequence) {
 		string result; // результат (строка)
 		int count = 0; // счетчик нулей
