@@ -17,20 +17,22 @@ namespace My347 {
 	using namespace msclr;
 	using namespace msclr::interop;
 
-	system("chcp 1251");
+	std::string findOccurrences(const std::string& S, const std::string& T) {
+		int n = S.length();
+		int m = T.length();
+		std::string result;
 
-	string decipherPattern(const string& binarySequence) {
-		string result; // результат (строка)
-		int count = 0; // счетчик нулей
-
-		for (char i : binarySequence) { // пробегаем по всем символам циклом
-			if (i == '1') { // если встретили '1', добавляем соответствующую букву
-				result += static_cast<char>('a' + count); // статик_каст удостоверяет то, что переменная будет типа char
-				// 'a' + count - прибавляем к ascii коду буквы a счетчкик
-				count = 0; // обнуляем счетчик
+		for (int i = 0; i <= n - m; ++i) {
+			bool found = true;
+			for (int j = 0; j < m; ++j) {
+				if (S[i + j] != T[j]) {
+					found = false;
+					break;
+				}
 			}
-			else {
-				count++; // если встретили '0', увеличиваем счетчик
+
+			if (found) {
+				result += "Pattern found at index " + std::to_string(i + 1) + "\n";
 			}
 		}
 
@@ -66,6 +68,7 @@ namespace My347 {
 	protected:
 	private: System::Windows::Forms::TextBox^ textBox1;
 	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::TextBox^ textBox2;
 
 	private:
 		/// <summary>
@@ -83,6 +86,7 @@ namespace My347 {
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
 			// label1
@@ -103,7 +107,7 @@ namespace My347 {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(15, 73);
+			this->button1->Location = System::Drawing::Point(15, 184);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(151, 49);
 			this->button1->TabIndex = 2;
@@ -111,11 +115,19 @@ namespace My347 {
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
+			// textBox2
+			// 
+			this->textBox2->Location = System::Drawing::Point(15, 94);
+			this->textBox2->Name = L"textBox2";
+			this->textBox2->Size = System::Drawing::Size(100, 20);
+			this->textBox2->TabIndex = 3;
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(617, 394);
+			this->Controls->Add(this->textBox2);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->label1);
@@ -126,16 +138,15 @@ namespace My347 {
 
 		}
 #pragma endregion
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		String^ inputString = textBox1->Text;
-		string nativeInput = marshal_as<string>(inputString);
-		string result = decipherPattern(nativeInput);
-		String^ convResult = gcnew String(result.c_str());
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+    string stringT = marshal_as<string>(textBox1->Text);
+    string stringS = marshal_as<string>(textBox2->Text);
+    string result = findOccurrences(stringS, stringT);
+    String^ convResult = gcnew String(result.c_str());
+    String^ resultMessage = "Результат дешифровки: " + convResult;
+    //resultMessage += "Результат дешифровки: " + convResult;
 
-		String^ resultMessage = "Результат дешифровки: " + convResult;
-		//resultMessage += "Результат дешифровки: " + convResult;
-
-		MessageBox::Show(resultMessage, "Результат дешифровки", MessageBoxButtons::OK, MessageBoxIcon::Information);
-	}
+    MessageBox::Show(resultMessage, "Результат дешифровки", MessageBoxButtons::OK, MessageBoxIcon::Information);
+    }
 	};
 }
